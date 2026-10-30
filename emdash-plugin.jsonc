@@ -8,7 +8,7 @@
 	"author": { "name": "Rie Tamura", "url": "https://bsky.app/profile/connectobasan.com" },
 	"security": { "url": "https://github.com/RieTamura/Auto-Thumbnail/issues" },
 	"name": "Auto Thumbnail",
-	"description": "One thumbnail design for posts without an image. Set it in the admin; a client such as Post To EmDash draws the title and date on it.",
+	"description": "Thumbnail design for posts without an image. Needs the Obsidian plugin Post To EmDash, which draws the title and date on it.",
 	"keywords": ["thumbnail", "featured-image", "og-image", "design", "obsidian"],
 	"repo": "https://github.com/RieTamura/Auto-Thumbnail",
 

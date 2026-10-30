@@ -1,7 +1,7 @@
 {
 	"name": "auto-thumbnail",
 	"version": "0.1.0",
-	"description": "One thumbnail design for every post without an image. Set it in the admin; a client such as Post To EmDash draws the title and date on it.",
+	"description": "Thumbnail design for posts without an image. Needs the Obsidian plugin Post To EmDash, which draws the title and date on it.",
 	"private": true,
 	"type": "module",
 	"license": "MIT",
