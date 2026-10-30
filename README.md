@@ -8,7 +8,20 @@ The plugin draws nothing itself. Rendering an image takes 30–150 ms of CPU, mo
 
 ## Install
 
-Install it from GitHub and run it in-process from `astro.config.mjs`, which needs no sandbox. npm builds it on install:
+There are two ways to install it.
+
+| From | Runs | Cloudflare plan | Install and update |
+| --- | --- | --- | --- |
+| The EmDash plugin registry | In the plugin sandbox | **Workers Paid** (the sandbox needs it) | From the admin |
+| GitHub | In-process, with your site | **Workers Free is fine** | `npm install`, then **deploy** |
+
+### From the registry
+
+In the admin, open **Registry**, search for **Auto Thumbnail** and install it. On Cloudflare, registry plugins run in the plugin sandbox, which needs the Workers Paid plan.
+
+### From GitHub
+
+Install it from GitHub and run it in-process from `astro.config.mjs`. It needs no sandbox, so it works on the Workers Free plan. npm builds it on install:
 
 ```sh
 npm install github:RieTamura/Auto-Thumbnail
@@ -22,6 +35,8 @@ emdash({
 	plugins: [autoThumbnail],
 });
 ```
+
+Then deploy the site. To update the plugin later, run the same `npm install` again and **deploy**; the admin cannot update a plugin installed this way.
 
 ## Setup
 
