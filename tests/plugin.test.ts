@@ -117,4 +117,15 @@ describe("admin page", () => {
 		expect(rejected.toast?.type).toBe("error");
 		expect((await getDesign(h)).data.textColor).toBe(DEFAULT_DESIGN.textColor);
 	});
+
+	it("uses the language setting over the admin's language", async () => {
+		const { h } = await setup();
+		await h.fixtures.plugin.setting("language", "ja");
+
+		const page = await h.admin.loadPage("/design", { locale: "en" });
+		expect(page.blocks[0]).toMatchObject({ type: "header", text: "サムネイル" });
+
+		const saved = await h.admin.submit("/design", "save", FORM, { locale: "en" });
+		expect(saved.toast?.message).toBe("保存しました。");
+	});
 });

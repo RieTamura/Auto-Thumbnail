@@ -180,8 +180,19 @@ const ADMIN_TEXT = {
 	},
 };
 
-async function designPage(ctx: PluginContext, adminLocale: string | undefined, design: Design) {
-	const text = adminLocale?.toLowerCase().startsWith("ja") ? ADMIN_TEXT.ja : ADMIN_TEXT.en;
+type AdminText = (typeof ADMIN_TEXT)["en"];
+
+/**
+ * The "language" setting wins; "auto" (the default) follows the admin. The live
+ * admin has passed English even when it was in Japanese, as with site-likes.
+ */
+async function adminText(ctx: PluginContext, adminLocale: string | undefined): Promise<AdminText> {
+	const setting = await ctx.settings.get<string>("language");
+	const locale = setting === "ja" || setting === "en" ? setting : adminLocale;
+	return locale?.toLowerCase().startsWith("ja") ? ADMIN_TEXT.ja : ADMIN_TEXT.en;
+}
+
+async function designPage(ctx: PluginContext, text: AdminText, design: Design) {
 	const { items } = ctx.media ? await ctx.media.list({ mimeType: "image/", limit: MEDIA_LIMIT }) : { items: [] };
 	const images = items.filter((item) => IMAGE_TYPES.includes(item.mimeType));
 	const options = [{ label: text.none, value: "" }, ...images.map((item) => ({ label: item.filename, value: item.id }))];
@@ -256,21 +267,20 @@ async function designPage(ctx: PluginContext, adminLocale: string | undefined, d
 
 async function adminRoute(ctx: PluginContext, input: unknown, adminLocale: string | undefined) {
 	const interaction = (typeof input === "object" && input !== null ? input : {}) as Record<string, unknown>;
-	const japanese = adminLocale?.toLowerCase().startsWith("ja") ?? false;
-	const text = japanese ? ADMIN_TEXT.ja : ADMIN_TEXT.en;
+	const text = await adminText(ctx, adminLocale);
 
 	if (interaction.type === "form_submit" && interaction.action_id === "save") {
 		const parsed = parseDesign(interaction.values);
 		if ("invalid" in parsed) {
 			return {
-				...(await designPage(ctx, adminLocale, await readDesign(ctx))),
+				...(await designPage(ctx, text, await readDesign(ctx))),
 				toast: { type: "error", message: text.invalid },
 			};
 		}
 		await ctx.settings.set(SETTINGS_KEY, parsed.design);
-		return { ...(await designPage(ctx, adminLocale, parsed.design)), toast: { type: "success", message: text.saved } };
+		return { ...(await designPage(ctx, text, parsed.design)), toast: { type: "success", message: text.saved } };
 	}
-	return designPage(ctx, adminLocale, await readDesign(ctx));
+	return designPage(ctx, text, await readDesign(ctx));
 }
 
 const plugin: SandboxedPlugin = {

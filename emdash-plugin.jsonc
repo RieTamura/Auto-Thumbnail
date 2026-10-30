@@ -21,6 +21,19 @@
 	"allowedHosts": [],
 
 	"admin": {
-		"pages": [{ "path": "/design", "label": "Thumbnail", "icon": "image" }]
+		"pages": [{ "path": "/design", "label": "Thumbnail", "icon": "image" }],
+		"settingsSchema": {
+			"language": {
+				"label": "Language / 表示する言語",
+				"description": "Language of the Thumbnail page. Auto follows the admin's language. / 「サムネイル」ページの言語。自動は管理画面の言語に合わせます。",
+				"type": "select",
+				"options": [
+					{ "value": "auto", "label": "Auto / 自動" },
+					{ "value": "ja", "label": "日本語" },
+					{ "value": "en", "label": "English" }
+				],
+				"default": "auto"
+			}
+		}
 	}
 }
