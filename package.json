@@ -1,8 +1,14 @@
 {
 	"name": "auto-thumbnail",
 	"version": "0.1.0",
+	"description": "One thumbnail design for every post without an image. Set it in the admin; a client such as Post To EmDash draws the title and date on it.",
 	"private": true,
 	"type": "module",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/RieTamura/Auto-Thumbnail.git"
+	},
 	"packageManager": "npm@11.13.0",
 	"main": "dist/index.mjs",
 	"exports": {
@@ -19,10 +25,14 @@
 	"scripts": {
 		"validate": "emdash-plugin validate",
 		"build": "emdash-plugin build",
+		"prepare": "emdash-plugin build",
 		"dev": "emdash-plugin dev",
 		"typecheck": "tsc --noEmit",
 		"test": "emdash-plugin validate && vitest run",
-		"bundle": "emdash-plugin bundle"
+		"bundle": "emdash-plugin bundle",
+		"login": "emdash-plugin login",
+		"publish": "emdash-plugin publish",
+		"release:setup": "emdash-plugin release setup"
 	},
 	"peerDependencies": {
 		"emdash": ">=1.3.0"

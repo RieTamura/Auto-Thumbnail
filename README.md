@@ -4,6 +4,32 @@ One thumbnail design for every post that has no image. You set the design in the
 
 The plugin draws nothing itself. Rendering an image takes 30–150 ms of CPU, more than a Workers free plan allows per request, so the drawing happens in the client. [Post To EmDash](https://github.com/RieTamura/Post-To-EmDash) (Obsidian) does it when it sends a post with no `cover` and no image in the body.
 
+[日本語の説明はこちら](README_JA.md)
+
+## Install
+
+Install it from GitHub and run it in-process from `astro.config.mjs`, which needs no sandbox. npm builds it on install:
+
+```sh
+npm install github:RieTamura/Auto-Thumbnail
+```
+
+```js
+import autoThumbnail from "auto-thumbnail";
+
+emdash({
+	// ...
+	plugins: [autoThumbnail],
+});
+```
+
+## Setup
+
+1. Install the plugin and deploy the site.
+2. In the admin, open **Thumbnail** and choose the design, then save. To show a background image or a logo, upload it in **Media** first.
+3. If the Thumbnail page shows in the wrong language, set the plugin's **Language** setting (Auto, 日本語, English). Auto follows the admin.
+4. In Post To EmDash, leave **Automatic thumbnail** on. A post with no `cover` and no image in the body now gets a thumbnail when you send it.
+
 ## How it works
 
 - `GET /_emdash/api/plugins/auto-thumbnail/design` (public) returns the design:
@@ -26,12 +52,14 @@ The plugin draws nothing itself. Rendering an image takes 30–150 ms of CPU, mo
 - `GET /_emdash/api/plugins/auto-thumbnail/image?kind=background|logo` (public) returns the chosen image. Only those two images are served; PNG, JPEG, WebP and GIF.
 - The admin page lists the images in Media for the background and logo, and checks colors (`#RRGGBB`) before saving.
 
+A thumbnail is made once, when the post is sent. Changing the design later does not change thumbnails already made; send the post again to redraw it.
+
 ## Capabilities
 
-| Capability         | Why                                                   |
-| ------------------ | ----------------------------------------------------- |
+| Capability         | Why                                                        |
+| ------------------ | ---------------------------------------------------------- |
 | `media:read`       | List images in the admin to choose the background and logo |
-| `media:bytes:read` | Serve the chosen background and logo to the client    |
+| `media:bytes:read` | Serve the chosen background and logo to the client         |
 
 ## Development
 
@@ -40,3 +68,11 @@ npm install
 npm test        # validate the manifest, then run the tests in the sandbox
 npm run build
 ```
+
+## Security
+
+Report problems in [Issues](https://github.com/RieTamura/Auto-Thumbnail/issues).
+
+## License
+
+MIT
