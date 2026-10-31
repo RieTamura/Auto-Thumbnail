@@ -1,4 +1,4 @@
-# Auto Thumbnail
+# Thumbnail Design for Post To EmDash
 
 One thumbnail design for every post that has no image. You set the design in the admin under **Thumbnail**: a background color or image, the text color, and whether to show the site name and a logo. A client draws each post's title and date on it and uploads the result as the post's featured image.
 
@@ -11,6 +11,8 @@ One thumbnail design for every post that has no image. You set the design in the
 > Posts written in the EmDash admin or sent from anywhere else get no thumbnail.
 
 The plugin draws nothing itself. Rendering an image takes 30–150 ms of CPU, more than a Workers free plan allows per request, so the drawing happens in the client. Post To EmDash does it when it sends a post with no `cover` and no image in the body.
+
+Formerly named Auto Thumbnail. The slug, the package name and the API paths are still `auto-thumbnail`.
 
 [日本語の説明はこちら](README_JA.md)
 
@@ -25,7 +27,7 @@ There are two ways to install it.
 
 ### From the registry
 
-In the admin, open **Registry**, search for **Auto Thumbnail** and install it. On Cloudflare, registry plugins run in the plugin sandbox, which needs the Workers Paid plan.
+In the admin, open **Registry**, search for **Thumbnail Design for Post To EmDash** and install it. On Cloudflare, registry plugins run in the plugin sandbox, which needs the Workers Paid plan.
 
 ### From GitHub
 
