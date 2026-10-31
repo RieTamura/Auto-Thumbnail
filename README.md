@@ -1,4 +1,4 @@
-# Thumbnail Design for Post To EmDash
+# Auto Thumbnail Design
 
 One thumbnail design for every post that has no image. You set the design in the admin under **Thumbnail**: a background color or image, the text color, and whether to show the site name and a logo. A client draws each post's title and date on it and uploads the result as the post's featured image.
 
@@ -8,7 +8,7 @@ One thumbnail design for every post that has no image. You set the design in the
 > - this plugin on your EmDash site, and
 > - Post To EmDash in Obsidian, with **Automatic thumbnail** on (the default).
 >
-> Posts written in the EmDash admin or sent from anywhere else get no thumbnail.
+> Posts written in the EmDash admin or sent from anywhere else get no thumbnail, unless another tool draws one from the design (see [Use the design from other tools](#use-the-design-from-other-tools)).
 
 The plugin draws nothing itself. Rendering an image takes 30–150 ms of CPU, more than a Workers free plan allows per request, so the drawing happens in the client. Post To EmDash does it when it sends a post with no `cover` and no image in the body.
 
@@ -27,7 +27,7 @@ There are two ways to install it.
 
 ### From the registry
 
-In the admin, open **Registry**, search for **Thumbnail Design for Post To EmDash** and install it. On Cloudflare, registry plugins run in the plugin sandbox, which needs the Workers Paid plan.
+In the admin, open **Registry**, search for **Auto Thumbnail Design** and install it. On Cloudflare, registry plugins run in the plugin sandbox, which needs the Workers Paid plan.
 
 ### From GitHub
 
@@ -78,6 +78,21 @@ Then deploy the site. To update the plugin later, run the same `npm install` aga
 - The admin page lists the images in Media for the background and logo, and checks colors (`#RRGGBB`) before saving.
 
 A thumbnail is made once, when the post is sent. Changing the design later does not change thumbnails already made; send the post again to redraw it.
+
+## Use the design from other tools
+
+The `design` and `image` routes are public, so any tool or service can use the design, not only Post To EmDash. For example:
+
+- another editor, an app or a script that sends posts to EmDash can draw the same thumbnail;
+- the site's own templates can show a post without an image as an HTML and CSS card in the same design, with no image to make.
+
+To make a thumbnail the way Post To EmDash does:
+
+1. Read the design from `GET /_emdash/api/plugins/auto-thumbnail/design`.
+2. Draw a `width` × `height` image: the background color, or the background image (and the overlay band when `overlay` is `true`), then the post's title and date in `textColor` with the `font`, and the `siteName` and `logo` when they are not `null`.
+3. Upload the image with the EmDash media API and set it as the post's `featured_image`. This step needs an API token with `media:write` and `content:write`.
+
+The routes only read the design. They cannot change it or any post.
 
 ## Capabilities
 
