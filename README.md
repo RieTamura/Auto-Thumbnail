@@ -3,7 +3,7 @@
 One thumbnail design for every post that has no image. You set the design in the admin under **Thumbnail**: a background color or image, the text color, and whether to show the site name and a logo. A client draws each post's title and date on it and uploads the result as the post's featured image.
 
 > [!IMPORTANT]
-> **This plugin does not work on its own.** It only keeps the design. The thumbnails are drawn by the Obsidian plugin [Post To EmDash](https://github.com/RieTamura/Post-To-EmDash) (0.2.0 or later), so you need both:
+> **This plugin does not work on its own.** It only keeps the design. The thumbnails are drawn by the Obsidian plugin [Post To EmDash](https://github.com/RieTamura/Post-To-EmDash) (0.2.0 or later; logo shapes and positions need 0.4.0 or later), so you need both:
 >
 > - this plugin on your EmDash site, and
 > - Post To EmDash in Obsidian, with **Automatic thumbnail** on (the default).
