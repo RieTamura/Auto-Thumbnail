@@ -57,7 +57,7 @@ emdash({
 
 ## 仕組み
 
-- `GET /_emdash/api/plugins/auto-thumbnail/design`（だれでも読める）：デザインを返します。`image` と `logo` はサイトからの相対 URL か `null`、`font` は Google Fonts のフォント名です。`overlay` は、写真の上でも読めるように文字の下に背景色の帯を敷くかどうかです。
+- `GET /_emdash/api/plugins/auto-thumbnail/design`（だれでも読める）：デザインを返します。`image` と `logo` はサイトからの相対 URL か `null`、`font` は Google Fonts のフォント名です。`overlay` は、写真の上でも読めるように文字の下に背景色の帯を敷くかどうかです。`logoShape` はロゴの形で、`original`（全体をそのまま）、`square`（中央を、角を少し丸めた四角に切り抜く）、`circle`（中央を丸く切り抜く）のどれかです。`datePosition` は日付、`logoPosition` はロゴとサイト名を下の段のどちら側に置くかで、`left` か `right` です。同じ側のときは、日付をロゴとサイト名の上の段に置きます。
 - `GET /_emdash/api/plugins/auto-thumbnail/image?kind=background|logo`（だれでも読める）：選んだ背景とロゴだけを返します（PNG・JPEG・WebP・GIF）。
 - 管理画面では、メディアの画像から背景とロゴを選べます。色は `#RRGGBB` の形かを確かめてから保存します。
 
@@ -73,7 +73,7 @@ emdash({
 Post To EmDash と同じようにサムネイルを作る手順は次のとおりです。
 
 1. `GET /_emdash/api/plugins/auto-thumbnail/design` でデザインを読みます。
-2. `width` × `height` の画像を描きます。背景の色か背景の画像（`overlay` が `true` なら文字の下に帯）を敷き、記事のタイトルと日付を `textColor` の色、`font` のフォントで描きます。`siteName` と `logo` が `null` でなければ、それも入れます。
+2. `width` × `height` の画像を描きます。背景の色か背景の画像（`overlay` が `true` なら文字の下に帯）を敷き、記事のタイトルと日付を `textColor` の色、`font` のフォントで描きます。`siteName` と `logo` が `null` でなければ、それも入れます。ロゴは `logoShape` の形にします。置く側は `datePosition` と `logoPosition` に従います。
 3. EmDash のメディア API で画像をアップロードし、記事の `featured_image` に設定します。ここでは `media:write` と `content:write` の権限を持つ API トークンが必要です。
 
 この2つの API はデザインを読むだけで、デザインや記事を変えることはできません。

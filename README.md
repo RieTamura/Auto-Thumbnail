@@ -68,11 +68,14 @@ Then deploy the site. To update the plugin later, run the same `npm install` aga
   	"textColor": "#3A2E25",
   	"font": "Zen Maru Gothic",
   	"siteName": "My Blog",
-  	"logo": null
+  	"logo": null,
+  	"logoShape": "original",
+  	"datePosition": "left",
+  	"logoPosition": "right"
   }
   ```
 
-  `image` and `logo` are relative to the site, or `null`. `font` is a Google Fonts family name. `overlay` asks for a band of the background color under the text, so it reads on a photo.
+  `image` and `logo` are relative to the site, or `null`. `font` is a Google Fonts family name. `overlay` asks for a band of the background color under the text, so it reads on a photo. `logoShape` is `original` (draw the whole logo), `square` (cut out the center as a square with slightly rounded corners) or `circle` (cut out the center as a circle). `datePosition` and `logoPosition` are `left` or `right`: the side of the bottom row for the date, and for the logo and site name. On the same side, the date goes above the logo and site name.
 
 - `GET /_emdash/api/plugins/auto-thumbnail/image?kind=background|logo` (public) returns the chosen image. Only those two images are served; PNG, JPEG, WebP and GIF.
 - The admin page lists the images in Media for the background and logo, and checks colors (`#RRGGBB`) before saving.
@@ -89,7 +92,7 @@ The `design` and `image` routes are public, so any tool or service can use the d
 To make a thumbnail the way Post To EmDash does:
 
 1. Read the design from `GET /_emdash/api/plugins/auto-thumbnail/design`.
-2. Draw a `width` × `height` image: the background color, or the background image (and the overlay band when `overlay` is `true`), then the post's title and date in `textColor` with the `font`, and the `siteName` and `logo` when they are not `null`.
+2. Draw a `width` × `height` image: the background color, or the background image (and the overlay band when `overlay` is `true`), then the post's title and date in `textColor` with the `font`, and the `siteName` and `logo` when they are not `null`, with the logo cut to `logoShape`. Put them on the sides given by `datePosition` and `logoPosition`.
 3. Upload the image with the EmDash media API and set it as the post's `featured_image`. This step needs an API token with `media:write` and `content:write`.
 
 The routes only read the design. They cannot change it or any post.

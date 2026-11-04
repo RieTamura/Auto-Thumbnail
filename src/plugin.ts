@@ -9,6 +9,9 @@ import { pluginResponse } from "emdash/plugin";
  * Workers free plan has too little CPU time to render an image per request.
  */
 
+export type LogoShape = "original" | "square" | "circle";
+export type Position = "left" | "right";
+
 export interface Design {
 	background: "color" | "image";
 	backgroundColor: string;
@@ -22,6 +25,12 @@ export interface Design {
 	showLogo: boolean;
 	/** Media ID of the logo. */
 	logo: string;
+	/** How the logo is cut out. "square" has slightly rounded corners. */
+	logoShape: LogoShape;
+	/** Which side of the bottom row the date goes on. */
+	datePosition: Position;
+	/** Which side of the bottom row the logo and site name go on. */
+	logoPosition: Position;
 	/** A Google Fonts family name. */
 	font: string;
 }
@@ -36,6 +45,9 @@ export const DEFAULT_DESIGN: Design = {
 	siteName: "",
 	showLogo: false,
 	logo: "",
+	logoShape: "original",
+	datePosition: "left",
+	logoPosition: "right",
 	font: "Zen Maru Gothic",
 };
 
@@ -71,6 +83,8 @@ export function parseDesign(values: unknown): { design: Design } | { invalid: st
 		if (!MEDIA_ID_PATTERN.test(value)) invalid.push(key);
 		return value;
 	};
+	const shape = text("logoShape");
+	const logoShape: LogoShape = shape === "square" || shape === "circle" ? shape : "original";
 	const font = text("font") || DEFAULT_DESIGN.font;
 	if (!FONT_PATTERN.test(font)) invalid.push("font");
 
@@ -84,6 +98,9 @@ export function parseDesign(values: unknown): { design: Design } | { invalid: st
 		siteName: text("siteName").slice(0, 80),
 		showLogo: v.showLogo === true,
 		logo: mediaId("logo"),
+		logoShape,
+		datePosition: text("datePosition") === "right" ? "right" : "left",
+		logoPosition: text("logoPosition") === "left" ? "left" : "right",
 		font,
 	};
 	if (design.background === "image" && !design.backgroundImage) invalid.push("backgroundImage");
@@ -110,6 +127,9 @@ export function publicDesign(design: Design) {
 		font: design.font,
 		siteName: design.showSiteName && design.siteName ? design.siteName : null,
 		logo: design.showLogo && design.logo ? `${ROUTE_BASE}/image?kind=logo&v=${encodeURIComponent(design.logo)}` : null,
+		logoShape: design.logoShape,
+		datePosition: design.datePosition,
+		logoPosition: design.logoPosition,
 	};
 }
 
@@ -134,7 +154,7 @@ async function imageResponse(ctx: PluginContext, input: unknown) {
 const ADMIN_TEXT = {
 	en: {
 		title: "Thumbnail",
-		note: "Posts without an image get this design, with their title and date drawn on it. Post To EmDash (Obsidian) draws it when it sends a post with no cover and no image in the body.",
+		note: "Posts without an image get this design, with their title and date drawn on it. Post To EmDash (Obsidian) draws it when it sends a post with no cover and no image in the body. To see how a saved design looks, use Preview thumbnail in Post To EmDash.",
 		background: "Background",
 		backgroundColor: "Color",
 		backgroundImageOption: "Image",
@@ -146,6 +166,14 @@ const ADMIN_TEXT = {
 		siteName: "Site name",
 		showLogo: "Show a logo",
 		logo: "Logo",
+		logoShape: "Logo shape (square and circle cut out the center of the image)",
+		logoOriginal: "As is",
+		logoSquare: "Square",
+		logoCircle: "Circle",
+		datePosition: "Date position",
+		logoPosition: "Logo and site name position (on the same side as the date, the date goes above them)",
+		left: "Left",
+		right: "Right",
 		font: "Font (a Google Fonts name)",
 		none: "(none)",
 		save: "Save",
@@ -157,7 +185,7 @@ const ADMIN_TEXT = {
 	},
 	ja: {
 		title: "サムネイル",
-		note: "画像のない投稿は、このデザインにタイトルと日付を載せたサムネイルになります。Post To EmDash（Obsidian）で、cover も本文の画像もない記事を送ったときに作られます。",
+		note: "画像のない投稿は、このデザインにタイトルと日付を載せたサムネイルになります。Post To EmDash（Obsidian）で、cover も本文の画像もない記事を送ったときに作られます。保存したデザインの仕上がりは、Post To EmDash の「サムネイルをプレビュー」で確かめられます。",
 		background: "背景",
 		backgroundColor: "色",
 		backgroundImageOption: "画像",
@@ -169,6 +197,14 @@ const ADMIN_TEXT = {
 		siteName: "サイト名",
 		showLogo: "ロゴを入れる",
 		logo: "ロゴ",
+		logoShape: "ロゴの形（四角と丸は、画像の中央を切り抜きます）",
+		logoOriginal: "そのまま",
+		logoSquare: "四角",
+		logoCircle: "丸",
+		datePosition: "日付の場所",
+		logoPosition: "ロゴとサイト名の場所（日付と同じ側にすると、日付はその上の段に入ります）",
+		left: "左",
+		right: "右",
 		font: "フォント（Google Fonts の名前）",
 		none: "（なし）",
 		save: "保存",
@@ -255,6 +291,38 @@ async function designPage(ctx: PluginContext, text: AdminText, design: Design) {
 						options,
 						initial_value: design.logo,
 						condition: { field: "showLogo", eq: true },
+					},
+					{
+						type: "select",
+						action_id: "logoShape",
+						label: text.logoShape,
+						options: [
+							{ label: text.logoOriginal, value: "original" },
+							{ label: text.logoSquare, value: "square" },
+							{ label: text.logoCircle, value: "circle" },
+						],
+						initial_value: design.logoShape,
+						condition: { field: "showLogo", eq: true },
+					},
+					{
+						type: "select",
+						action_id: "datePosition",
+						label: text.datePosition,
+						options: [
+							{ label: text.left, value: "left" },
+							{ label: text.right, value: "right" },
+						],
+						initial_value: design.datePosition,
+					},
+					{
+						type: "select",
+						action_id: "logoPosition",
+						label: text.logoPosition,
+						options: [
+							{ label: text.left, value: "left" },
+							{ label: text.right, value: "right" },
+						],
+						initial_value: design.logoPosition,
 					},
 					{ type: "text_input", action_id: "font", label: text.font, initial_value: design.font },
 				],
