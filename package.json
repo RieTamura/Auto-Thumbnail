@@ -1,6 +1,6 @@
 {
 	"name": "auto-thumbnail",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"description": "Thumbnail design for posts without an image. Needs the Obsidian plugin Post To EmDash, which draws the title and date on it.",
 	"private": true,
 	"type": "module",
