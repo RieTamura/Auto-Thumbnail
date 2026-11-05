@@ -11,6 +11,12 @@
 	"description": "Thumbnail design for posts without an image. Needs the Obsidian plugin Post To EmDash, which draws the title and date on it.",
 	"keywords": ["thumbnail", "featured-image", "og-image", "design", "obsidian"],
 	"repo": "https://github.com/RieTamura/Auto-Thumbnail",
+	"release": {
+		"artifacts": {
+			"icon": { "file": "./images/icon.png" },
+			"banner": { "file": "./images/banner.png" }
+		}
+	},
 
 	// Trust contract — what runtime APIs the plugin asks for.
 	// Changing these between releases requires a version bump because
