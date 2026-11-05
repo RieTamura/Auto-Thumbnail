@@ -33,6 +33,7 @@ const FORM = {
 	logoShape: "original",
 	datePosition: "left",
 	logoPosition: "right",
+	metaSize: "normal",
 	font: "Zen Maru Gothic",
 };
 
@@ -118,6 +119,15 @@ describe("design route", () => {
 		const { logoShape: _, ...saved } = FORM;
 		await h.fixtures.plugin.setting("design", saved);
 		expect((await getDesign(h)).data.logoShape).toBe("original");
+	});
+
+	it("serves the chosen size, and normal for a design saved before it existed", async () => {
+		const { h } = await setup();
+		await h.admin.submit("/design", "save", { ...FORM, metaSize: "xlarge" });
+		expect((await getDesign(h)).data.metaSize).toBe("xlarge");
+		const { metaSize: _, ...saved } = FORM;
+		await h.fixtures.plugin.setting("design", saved);
+		expect((await getDesign(h)).data.metaSize).toBe("normal");
 	});
 
 	it("serves the chosen positions", async () => {

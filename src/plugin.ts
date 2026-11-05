@@ -11,6 +11,7 @@ import { pluginResponse } from "emdash/plugin";
 
 export type LogoShape = "original" | "square" | "circle";
 export type Position = "left" | "right";
+export type MetaSize = "normal" | "large" | "xlarge";
 
 export interface Design {
 	background: "color" | "image";
@@ -31,6 +32,8 @@ export interface Design {
 	datePosition: Position;
 	/** Which side of the bottom row the logo and site name go on. */
 	logoPosition: Position;
+	/** Size of the logo, site name and date together. */
+	metaSize: MetaSize;
 	/** A Google Fonts family name. */
 	font: string;
 }
@@ -48,6 +51,7 @@ export const DEFAULT_DESIGN: Design = {
 	logoShape: "original",
 	datePosition: "left",
 	logoPosition: "right",
+	metaSize: "normal",
 	font: "Zen Maru Gothic",
 };
 
@@ -85,6 +89,8 @@ export function parseDesign(values: unknown): { design: Design } | { invalid: st
 	};
 	const shape = text("logoShape");
 	const logoShape: LogoShape = shape === "square" || shape === "circle" ? shape : "original";
+	const size = text("metaSize");
+	const metaSize: MetaSize = size === "large" || size === "xlarge" ? size : "normal";
 	const font = text("font") || DEFAULT_DESIGN.font;
 	if (!FONT_PATTERN.test(font)) invalid.push("font");
 
@@ -101,6 +107,7 @@ export function parseDesign(values: unknown): { design: Design } | { invalid: st
 		logoShape,
 		datePosition: text("datePosition") === "right" ? "right" : "left",
 		logoPosition: text("logoPosition") === "left" ? "left" : "right",
+		metaSize,
 		font,
 	};
 	if (design.background === "image" && !design.backgroundImage) invalid.push("backgroundImage");
@@ -130,6 +137,7 @@ export function publicDesign(design: Design) {
 		logoShape: design.logoShape,
 		datePosition: design.datePosition,
 		logoPosition: design.logoPosition,
+		metaSize: design.metaSize,
 	};
 }
 
@@ -174,6 +182,10 @@ const ADMIN_TEXT = {
 		logoPosition: "Logo and site name position (on the same side as the date, the date goes above them)",
 		left: "Left",
 		right: "Right",
+		metaSize: "Size of the logo, site name and date",
+		metaNormal: "Normal",
+		metaLarge: "Large",
+		metaXlarge: "Extra large",
 		font: "Font (a Google Fonts name)",
 		none: "(none)",
 		save: "Save",
@@ -205,6 +217,10 @@ const ADMIN_TEXT = {
 		logoPosition: "ロゴとサイト名の場所（日付と同じ側にすると、日付はその上の段に入ります）",
 		left: "左",
 		right: "右",
+		metaSize: "ロゴ・サイト名・日付の大きさ",
+		metaNormal: "標準",
+		metaLarge: "大",
+		metaXlarge: "特大",
 		font: "フォント（Google Fonts の名前）",
 		none: "（なし）",
 		save: "保存",
@@ -323,6 +339,17 @@ async function designPage(ctx: PluginContext, text: AdminText, design: Design) {
 							{ label: text.right, value: "right" },
 						],
 						initial_value: design.logoPosition,
+					},
+					{
+						type: "select",
+						action_id: "metaSize",
+						label: text.metaSize,
+						options: [
+							{ label: text.metaNormal, value: "normal" },
+							{ label: text.metaLarge, value: "large" },
+							{ label: text.metaXlarge, value: "xlarge" },
+						],
+						initial_value: design.metaSize,
 					},
 					{ type: "text_input", action_id: "font", label: text.font, initial_value: design.font },
 				],

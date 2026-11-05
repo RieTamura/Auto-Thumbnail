@@ -57,7 +57,7 @@ emdash({
 
 ## 仕組み
 
-- `GET /_emdash/api/plugins/auto-thumbnail/design`（だれでも読める）：デザインを返します。`image` と `logo` はサイトからの相対 URL か `null`、`font` は Google Fonts のフォント名です。`overlay` は、写真の上でも読めるように文字の下に背景色の帯を敷くかどうかです。`logoShape` はロゴの形で、`original`（全体をそのまま）、`square`（中央を、角を少し丸めた四角に切り抜く）、`circle`（中央を丸く切り抜く）のどれかです。`datePosition` は日付、`logoPosition` はロゴとサイト名を下の段のどちら側に置くかで、`left` か `right` です。同じ側のときは、日付をロゴとサイト名の上の段に置きます。
+- `GET /_emdash/api/plugins/auto-thumbnail/design`（だれでも読める）：デザインを返します。`image` と `logo` はサイトからの相対 URL か `null`、`font` は Google Fonts のフォント名です。`overlay` は、写真の上でも読めるように文字の下に背景色の帯を敷くかどうかです。`logoShape` はロゴの形で、`original`（全体をそのまま）、`square`（中央を、角を少し丸めた四角に切り抜く）、`circle`（中央を丸く切り抜く）のどれかです。`datePosition` は日付、`logoPosition` はロゴとサイト名を下の段のどちら側に置くかで、`left` か `right` です。同じ側のときは、日付をロゴとサイト名の上の段に置きます。`metaSize` はロゴ、サイト名、日付をまとめた大きさで、`normal`、`large`、`xlarge` のどれかです。Post To EmDash は 1200 × 630 の画像に、文字を 30、38、46 px、ロゴを 56、72、88 px で描きます。
 - `GET /_emdash/api/plugins/auto-thumbnail/image?kind=background|logo`（だれでも読める）：選んだ背景とロゴだけを返します（PNG・JPEG・WebP・GIF）。
 - 管理画面では、メディアの画像から背景とロゴを選べます。色は `#RRGGBB` の形かを確かめてから保存します。
 

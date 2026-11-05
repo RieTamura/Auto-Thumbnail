@@ -71,11 +71,12 @@ Then deploy the site. To update the plugin later, run the same `npm install` aga
   	"logo": null,
   	"logoShape": "original",
   	"datePosition": "left",
-  	"logoPosition": "right"
+  	"logoPosition": "right",
+  	"metaSize": "normal"
   }
   ```
 
-  `image` and `logo` are relative to the site, or `null`. `font` is a Google Fonts family name. `overlay` asks for a band of the background color under the text, so it reads on a photo. `logoShape` is `original` (draw the whole logo), `square` (cut out the center as a square with slightly rounded corners) or `circle` (cut out the center as a circle). `datePosition` and `logoPosition` are `left` or `right`: the side of the bottom row for the date, and for the logo and site name. On the same side, the date goes above the logo and site name.
+  `image` and `logo` are relative to the site, or `null`. `font` is a Google Fonts family name. `overlay` asks for a band of the background color under the text, so it reads on a photo. `logoShape` is `original` (draw the whole logo), `square` (cut out the center as a square with slightly rounded corners) or `circle` (cut out the center as a circle). `datePosition` and `logoPosition` are `left` or `right`: the side of the bottom row for the date, and for the logo and site name. On the same side, the date goes above the logo and site name. `metaSize` is `normal`, `large` or `xlarge`: the size of the logo, site name and date together. Post To EmDash draws the text at 30, 38 or 46 px and the logo at 56, 72 or 88 px on the 1200 × 630 image.
 
 - `GET /_emdash/api/plugins/auto-thumbnail/image?kind=background|logo` (public) returns the chosen image. Only those two images are served; PNG, JPEG, WebP and GIF.
 - The admin page lists the images in Media for the background and logo, and checks colors (`#RRGGBB`) before saving.
