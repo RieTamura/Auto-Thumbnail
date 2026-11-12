@@ -29,6 +29,9 @@
 
 管理画面の「レジストリ」で **Auto Thumbnail Design** を探して入れます。Cloudflare では、レジストリのプラグインはサンドボックスの中で動くため、Workers の有料プランが必要です。
 
+> [!WARNING]
+> **レジストリから入れると、今はサムネイルが描かれません。** EmDash は、レジストリから入れたプラグインを `auto-thumbnail` ではなく、自動で作った ID（`r_…`）で動かします（[emdash-cms/emdash#4335](https://github.com/emdash-cms/emdash/issues/4335)）。Post To EmDash と Notion To EmDash は `/_emdash/api/plugins/auto-thumbnail/design` からデザインを読むので、404 が返り、「デザインがないサイト」と判断してサムネイルを描きません。この件が決まるまでは、サムネイルを使うなら GitHub から入れてください（下）。
+
 ### GitHub から入れる
 
 GitHub から入れて、`astro.config.mjs` で動かします。サンドボックスを使わないので、Workers の無料プランで動きます。入れるときに npm がビルドします。
@@ -77,6 +80,8 @@ Post To EmDash と同じようにサムネイルを作る手順は次のとお�
 3. EmDash のメディア API で画像をアップロードし、記事の `featured_image` に設定します。ここでは `media:write` と `content:write` の権限を持つ API トークンが必要です。
 
 この2つの API はデザインを読むだけで、デザインや記事を変えることはできません。
+
+上の URL は GitHub から入れた場合のものです。レジストリから入れた場合は、`auto-thumbnail` の代わりに自動で作った ID になります（[レジストリから入れる](#レジストリから入れる)を参照）。ID は、管理画面のサムネイルのページの URL に出ます。
 
 ## 使う権限
 

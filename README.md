@@ -29,6 +29,9 @@ There are two ways to install it.
 
 In the admin, open **Registry**, search for **Auto Thumbnail Design** and install it. On Cloudflare, registry plugins run in the plugin sandbox, which needs the Workers Paid plan.
 
+> [!WARNING]
+> **Thumbnails are not drawn yet for a registry install.** EmDash serves a plugin installed from the registry under a generated ID (`r_…`), not under `auto-thumbnail` ([emdash-cms/emdash#4335](https://github.com/emdash-cms/emdash/issues/4335)). Post To EmDash and Notion To EmDash read the design from `/_emdash/api/plugins/auto-thumbnail/design`, which then returns 404, so they treat the site as having no design and draw no thumbnail. Until this is settled, install the plugin from GitHub (below) if you want thumbnails.
+
 ### From GitHub
 
 Install it from GitHub and run it in-process from `astro.config.mjs`. It needs no sandbox, so it works on the Workers Free plan. npm builds it on install:
@@ -97,6 +100,8 @@ To make a thumbnail the way Post To EmDash does:
 3. Upload the image with the EmDash media API and set it as the post's `featured_image`. This step needs an API token with `media:write` and `content:write`.
 
 The routes only read the design. They cannot change it or any post.
+
+The paths above are for a GitHub install. A registry install is served under its generated ID instead of `auto-thumbnail` (see [From the registry](#from-the-registry)); the ID shows in the admin URL of the Thumbnail page.
 
 ## Capabilities
 
